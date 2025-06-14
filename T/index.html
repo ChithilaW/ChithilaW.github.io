@@ -1,193 +1,676 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
-    />
-  </head>
-  <body>
-    <section class="hero is-primary is-bold">
-      <div class="hero-body">
-        <div class="container">
-          <h1 class="title">Data Entry Form</h1>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Green Haven - Plants & Ceramic Pots</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .hero-image {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://images.unsplash.com/photo-1487147264018-f937fba0c817?ixlib=rb-4.0.3');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .product-card:hover .product-overlay {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .product-overlay {
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .contact-form input:focus, .contact-form textarea:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(74, 222, 128, 0.5);
+        }
+    </style>
+</head>
+<body class="font-sans bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="#" class="flex items-center space-x-2">
+                <i class="fas fa-leaf text-green-500 text-2xl"></i>
+                <span class="text-xl font-bold text-gray-800">Green Haven</span>
+            </a>
+            
+            <div class="hidden md:flex space-x-8">
+                <a href="#" class="text-gray-800 hover:text-green-500 font-medium" onclick="showHome()">Home</a>
+                <a href="#" class="text-gray-800 hover:text-green-500 font-medium" onclick="showProducts()">Products</a>
+                <a href="#" class="text-gray-800 hover:text-green-500 font-medium" onclick="showAbout()">About</a>
+                <a href="#" class="text-gray-800 hover:text-green-500 font-medium" onclick="showContact()">Contact</a>
+            </div>
+            
+            <!--<div class="flex items-center space-x-4">
+                <a href="#" class="text-gray-800 hover:text-green-500">
+                    <i class="fas fa-user"></i>
+                </a>
+                <button class="md:hidden text-gray-800" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div> -->
         </div>
-      </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="md:hidden hidden bg-white border-t">
+            <div class="container mx-auto px-4 py-3 flex flex-col space-y-3">
+                <a href="#" class="text-gray-800 hover:text-green-500 py-2" onclick="showHome()">Home</a>
+                <a href="#" class="text-gray-800 hover:text-green-500 py-2" onclick="showProducts()">Products</a>
+                <a href="#" class="text-gray-800 hover:text-green-500 py-2" onclick="showAbout()">About</a>
+                <a href="#" class="text-gray-800 hover:text-green-500 py-2" onclick="showContact()">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="page-section">
+        <div class="hero-image h-screen flex items-center justify-center text-center text-white">
+            <div class="px-6 max-w-4xl">
+                <h1 class="text-4xl md:text-6xl font-bold mb-6">Bring Nature Into Your Home</h1>
+                <p class="text-xl md:text-2xl mb-8">Discover our exquisite collection of plants and handcrafted ceramic pots to create your perfect green space.</p>
+                <button onclick="showProducts()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full transition duration-300 transform hover:scale-105">
+                    Shop Now
+                </button>
+            </div>
+        </div>
     </section>
-    <form id="form" class="container m-4 pl-4" method="POST">
-      <div class="field">
-        <label class="label">First Name</label>
-        <div class="control">
-          <input
-            class="input"
-            type="text"
-            placeholder="Your First Name"
-            name="First Name"
-          />
-        </div>
-      </div>
 
-      <div class="field">
-        <label class="label">Last Name</label>
-        <div class="control">
-          <input
-            class="input"
-            type="text"
-            placeholder="Your Last Name"
-            name="Last Name"
-          />
+    <!-- Featured Products Section -->
+    <section id="products" class="page-section hidden py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">Our Collection</h2>
+            
+            <!-- Category Tabs -->
+            <div class="flex justify-center mb-12">
+                <div class="inline-flex rounded-md shadow-sm">
+                    <button onclick="filterProducts('all')" class="px-4 py-2 text-sm font-medium rounded-l-lg bg-green-500 text-white transition-all duration-300 hover:bg-green-600 hover:shadow-md transform hover:-translate-y-0.5">
+                        All Items
+                    </button>
+                    <button onclick="filterProducts('plants')" class="px-4 py-2 text-sm font-medium bg-white text-gray-700 transition-all duration-300 hover:bg-green-50 hover:text-green-600 hover:shadow-md transform hover:-translate-y-0.5">
+                        Plants
+                    </button>
+                    <button onclick="filterProducts('pots')" class="px-4 py-2 text-sm font-medium rounded-r-lg bg-white text-gray-700 transition-all duration-300 hover:bg-green-50 hover:text-green-600 hover:shadow-md transform hover:-translate-y-0.5">
+                        Ceramic Pots
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Products Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <!-- Product 1 -->
+                <div class="product-card plants bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition duration-300">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?ixlib=rb-4.0.3" alt="Monstera Plant" class="w-full h-64 object-cover">
+                        <div class="product-overlay absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                            <button onclick="viewProduct(this)" class="bg-white text-green-500 font-bold py-2 px-6 rounded-full hover:bg-green-500 hover:text-white transition duration-300">
+                                View Details
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-xl font-semibold text-gray-800">Monstera Deliciosa</h3>
+                        <p class="text-gray-600 mb-2">Large Swiss Cheese Plant</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-green-500 font-bold text-lg">$39.99</span>
+                            <div class="flex space-x-1 text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 2 -->
+                <div class="product-card pots bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition duration-300">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?ixlib=rb-4.0.3" alt="Ceramic Pot" class="w-full h-64 object-cover">
+                        <div class="product-overlay absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                            <button onclick="viewProduct(this)" class="bg-white text-green-500 font-bold py-2 px-6 rounded-full hover:bg-green-500 hover:text-white transition duration-300">
+                                View Details
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-xl font-semibold text-gray-800">Minimalist Ceramic Pot</h3>
+                        <p class="text-gray-600 mb-2">White with Black Accents</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-green-500 font-bold text-lg">$24.99</span>
+                            <div class="flex space-x-1 text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 3 -->
+                <div class="product-card plants bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition duration-300">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?ixlib=rb-4.0.3" alt="Snake Plant" class="w-full h-64 object-cover">
+                        <div class="product-overlay absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                            <button onclick="viewProduct(this)" class="bg-white text-green-500 font-bold py-2 px-6 rounded-full hover:bg-green-500 hover:text-white transition duration-300">
+                                View Details
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-xl font-semibold text-gray-800">Snake Plant</h3>
+                        <p class="text-gray-600 mb-2">Low Maintenance Indoor Plant</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-green-500 font-bold text-lg">$29.99</span>
+                            <div class="flex space-x-1 text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 4 -->
+                <div class="product-card pots bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition duration-300">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?ixlib=rb-4.0.3" alt="Geometric Pot" class="w-full h-64 object-cover">
+                        <div class="product-overlay absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                            <button onclick="viewProduct(this)" class="bg-white text-green-500 font-bold py-2 px-6 rounded-full hover:bg-green-500 hover:text-white transition duration-300">
+                                View Details
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-xl font-semibold text-gray-800">Geometric Ceramic Pot</h3>
+                        <p class="text-gray-600 mb-2">Modern Design - Terracotta</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-green-500 font-bold text-lg">$32.99</span>
+                            <div class="flex space-x-1 text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 5 -->
+                <div class="product-card plants bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition duration-300">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?ixlib=rb-4.0.3" alt="Fiddle Leaf Fig" class="w-full h-64 object-cover">
+                        <div class="product-overlay absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                            <button onclick="viewProduct(this)" class="bg-white text-green-500 font-bold py-2 px-6 rounded-full hover:bg-green-500 hover:text-white transition duration-300">
+                                View Details
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-xl font-semibold text-gray-800">Fiddle Leaf Fig</h3>
+                        <p class="text-gray-600 mb-2">Statement Indoor Tree</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-green-500 font-bold text-lg">$49.99</span>
+                            <div class="flex space-x-1 text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 6 -->
+                <div class="product-card pots bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition duration-300">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?ixlib=rb-4.0.3" alt="Hand-painted Pot" class="w-full h-64 object-cover">
+                        <div class="product-overlay absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                            <button onclick="viewProduct(this)" class="bg-white text-green-500 font-bold py-2 px-6 rounded-full hover:bg-green-500 hover:text-white transition duration-300">
+                                View Details
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-xl font-semibold text-gray-800">Hand-painted Ceramic</h3>
+                        <p class="text-gray-600 mb-2">Artisan Design - Blue Pattern</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-green-500 font-bold text-lg">$45.99</span>
+                            <div class="flex space-x-1 text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--
+            <div class="text-center mt-12">
+                <button class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full transition duration-300">
+                    View All Products
+                </button>
+            </div> -->
         </div>
-      </div>
+    </section>
 
-      <div class="field">
-        <label class="label">Phone Number(WhatsApp)</label>
-        <div class="control">
-          <input
-            class="input"
-            type="number"
-            placeholder="WhatsApp No."
-            name="Phone Number"
-          />
+    <!-- About Section -->
+    <section id="about" class="page-section hidden py-16 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col lg:flex-row items-center">
+                <div class="lg:w-1/2 mb-8 lg:mb-0 lg:pr-12">
+                    <h2 class="text-3xl font-bold mb-6 text-gray-800">Our Story</h2>
+                    <p class="text-gray-600 mb-4">
+                        Founded in 2015, Green Haven began as a small plant nursery with a passion for bringing nature into urban spaces. What started as a hobby quickly grew into a thriving business as we discovered the perfect pairing of plants with handcrafted ceramic pots.
+                    </p>
+                    <p class="text-gray-600 mb-6">
+                        Today, we collaborate with local artisans and sustainable growers to offer unique combinations that transform any space into a green oasis. Each piece in our collection is carefully selected for quality, beauty, and sustainability.
+                    </p>
+                    <div class="flex space-x-4">
+                        <div class="bg-white p-4 rounded-lg shadow-sm flex-1">
+                            <div class="text-green-500 text-2xl mb-2">
+                                <i class="fas fa-leaf"></i>
+                            </div>
+                            <h3 class="font-semibold text-gray-800 mb-1">500+ Plant Varieties</h3>
+                            <p class="text-sm text-gray-600">From succulents to statement trees</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg shadow-sm flex-1">
+                            <div class="text-green-500 text-2xl mb-2">
+                                <i class="fas fa-hands"></i>
+                            </div>
+                            <h3 class="font-semibold text-gray-800 mb-1">Handcrafted Pots</h3>
+                            <p class="text-sm text-gray-600">Unique artisan ceramic designs</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:w-1/2">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="rounded-lg overflow-hidden shadow-md">
+                            <img src="https://images.unsplash.com/photo-1560743641-3914f2c45628?ixlib=rb-4.0.3" alt="Our store" class="w-full h-full object-cover">
+                        </div>
+                        <div class="rounded-lg overflow-hidden shadow-md">
+                            <img src="https://images.unsplash.com/photo-1598880940080-ff9a29891a85?ixlib=rb-4.0.3" alt="Plant care" class="w-full h-full object-cover">
+                        </div>
+                        <div class="rounded-lg overflow-hidden shadow-md">
+                            <img src="https://images.unsplash.com/photo-1600566752227-967f0f7a9a82?ixlib=rb-4.0.3" alt="Ceramic making" class="w-full h-full object-cover">
+                        </div>
+                        <div class="rounded-lg overflow-hidden shadow-md">
+                            <img src="https://images.unsplash.com/photo-1598880799840-9bfdf3f4d436?ixlib=rb-4.0.3" alt="Plant arrangement" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-16">
+                <h2 class="text-3xl font-bold mb-8 text-center text-gray-800">Our Values</h2>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="bg-white p-6 rounded-lg shadow-sm text-center">
+                        <div class="text-green-500 text-4xl mb-4">
+                            <i class="fas fa-globe-americas"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800">Sustainability</h3>
+                        <p class="text-gray-600">
+                            We source plants from eco-conscious growers and use sustainable packaging to minimize our environmental impact.
+                        </p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm text-center">
+                        <div class="text-green-500 text-4xl mb-4">
+                            <i class="fas fa-hands-helping"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800">Community</h3>
+                        <p class="text-gray-600">
+                            Supporting local artisans and small businesses is at the heart of what we do. We believe in growing together.
+                        </p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm text-center">
+                        <div class="text-green-500 text-4xl mb-4">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800">Quality</h3>
+                        <p class="text-gray-600">
+                            Every product is carefully selected and inspected to ensure you receive only the best for your home.
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="field">
-        <label class="label">Date of Birth</label>
-        <div class="control">
-          <input
-            class="input"
-            type="date"
-            placeholder="Use DD/MM/YYYY format"
-            name="DOB"
-          />
-        </div>
-      </div>
-      <div class="field">
-        <label class="label">Age  (As of 01.01.2024)</label>
-        <div class="control">
-          <input
-            class="input"
-            type="number"
-            placeholder="mm/dd/yyyy"
-            name="Age"
-          />
-        </div>
-      <!--<div class="field">
-        <label class="label">Gender</label>
-        <div class="control">
-          <label class="radio">
-            <input type="radio" name="Gender" value="male" /> Male
-          </label>
-          <label class="radio">
-            <input type="radio" name="Gender" value="female" /> Female
-          </label>
-        </div>
-      </div>
+    </section>
 
-      <div class="field">
-        <label class="label">Agree to Terms</label>
-        <div class="control">
-          <label class="checkbox">
-            <input type="checkbox" name="Agree To Terms" value="yes" /> I agree
-            to the terms and conditions
-          </label>
+    <!-- Contact Section -->
+    <section id="contact" class="page-section hidden py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">Get In Touch</h2>
+            
+            <div class="flex flex-col lg:flex-row gap-12">
+                <div class="lg:w-1/2">
+                    <form id="contactForm" class="contact-form space-y-6">
+                        <div>
+                            <label for="name" class="block text-gray-700 font-medium mb-2">Your Name</label>
+                            <input type="text" id="name" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-green-500" placeholder="John Doe" required>
+                        </div>
+                        <div>
+                            <label for="email" class="block text-gray-700 font-medium mb-2">Email Address</label>
+                            <input type="email" id="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-green-500" placeholder="john@example.com" required>
+                        </div>
+                        <div>
+                            <label for="subject" class="block text-gray-700 font-medium mb-2">Subject</label>
+                            <input type="text" id="subject" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-green-500" placeholder="How can we help?">
+                        </div>
+                        <div>
+                            <label for="message" class="block text-gray-700 font-medium mb-2">Your Message</label>
+                            <textarea id="message" rows="5" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-green-500" placeholder="Type your message here..." required></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg transition duration-300">
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+                
+                <div class="lg:w-1/2">
+                    <div class="bg-gray-50 p-8 rounded-lg shadow-sm h-full">
+                        <h3 class="text-xl font-semibold mb-6 text-gray-800">Contact Information</h3>
+                        
+                        <div class="space-y-6">
+                            <div class="flex items-start">
+                                <div class="text-green-500 text-xl mt-1 mr-4">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-gray-800">Our Location</h4>
+                                    <p class="text-gray-600">123 Green Street, Plantville, PV 12345</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="text-green-500 text-xl mt-1 mr-4">
+                                    <i class="fas fa-phone-alt"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-gray-800">Phone Number</h4>
+                                    <p class="text-gray-600">+1 (555) 123-4567</p>
+                                    <p class="text-gray-600">Mon-Fri: 9am-6pm</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="text-green-500 text-xl mt-1 mr-4">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-gray-800">Email Address</h4>
+                                    <p class="text-gray-600">hello@greenhaven.com</p>
+                                    <p class="text-gray-600">support@greenhaven.com</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8">
+                            <h3 class="text-xl font-semibold mb-4 text-gray-800">Visit Our Store</h3>
+                            <div class="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden shadow-md">
+                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.215256357147!2d-73.9878449241645!3d40.74844097138896!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1689872431889!5m2!1sen!2sus" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
+    </section>
 
-      <div class="field">
-        <label class="label">Additional Information</label>
-        <div class="control">
-          <textarea
-            class="textarea"
-            placeholder="Any additional information"
-            name="Notes"
-          ></textarea>
+    <!-- Newsletter Section 
+    <section class="bg-green-50 py-12">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">Join Our Green Community</h2>
+            <p class="text-gray-600 mb-6 max-w-2xl mx-auto">Subscribe to our newsletter for plant care tips, new arrivals, and exclusive offers.</p>
+            <div class="flex flex-col sm:flex-row justify-center max-w-md mx-auto">
+                <input type="email" placeholder="Your email address" class="px-4 py-3 rounded-l-lg sm:rounded-r-none rounded-r-lg sm:rounded-l-lg border border-gray-300 focus:border-green-500 w-full mb-2 sm:mb-0">
+                <button class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-r-lg sm:rounded-l-none rounded-l-lg sm:rounded-r-lg transition duration-300">
+                    Subscribe
+                </button>
+            </div>
         </div>
-      </div>-->
+    </section> -->
 
-      <div class="field is-grouped">
-        <div class="control">
-          <button class="button is-primary" type="submit" id="submit-button">
-            Save Information
-          </button>
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4 flex items-center">
+                        <i class="fas fa-leaf mr-2 text-green-400"></i>
+                        Green Haven
+                    </h3>
+                    <p class="text-gray-400">
+                        Bringing nature and artistry together to create beautiful living spaces.
+                    </p>
+                    <div class="flex space-x-4 mt-4">
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-pinterest-p"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white" onclick="showHome()">Home</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white" onclick="showProducts()">Shop</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white" onclick="showAbout()">About Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white" onclick="showContact()">Contact</a></li>
+                     <!--  <li><a href="#" class="text-gray-400 hover:text-white">Blog</a></li> -->
+                    </ul>
+                </div>
+                
+                <!-- <div>
+                    <h4 class="font-semibold text-lg mb-4">Customer Service</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Shipping Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Return Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">FAQ</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Plant Care Guide</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Track Order</a></li>
+                    </ul>
+                </div>
+                -->
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Contact Info</h4>
+                    <address class="not-italic text-gray-400 space-y-2">
+                        <p>123 Green Street</p>
+                        <p>Plantville, PV 12345</p>
+                        <p>United States</p>
+                        <p>Phone: +1 (555) 123-4567</p>
+                        <p>Email: hello@greenhaven.com</p>
+                    </address>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm mb-4 md:mb-0">
+                    &copy; 2023 Green Haven. All rights reserved.
+                </p>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white text-sm">Privacy Policy</a>
+                    <a href="#" class="text-gray-400 hover:text-white text-sm">Terms of Service</a>
+                    <a href="#" class="text-gray-400 hover:text-white text-sm">Sitemap</a>
+                </div>
+            </div>
         </div>
-        <div class="control">
-          <button class="button is-danger">Cancel</button>
+    </footer>
+
+    <!-- Product Overview Modal -->
+    <div id="productModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 hidden">
+        <div class="bg-white p-8 rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex flex-col lg:flex-row gap-8">
+                <div class="lg:w-1/2">
+                    <img id="modalProductImage" src="" alt="" class="w-full h-auto rounded-lg shadow-md">
+                </div>
+                <div class="lg:w-1/2">
+                    <h3 id="modalProductTitle" class="text-2xl font-bold text-gray-800 mb-2"></h3>
+                    <p id="modalProductSubtitle" class="text-gray-600 mb-4"></p>
+                    <div class="flex justify-between items-center mb-6">
+                        <span id="modalProductPrice" class="text-green-500 font-bold text-xl"></span>
+                        <div id="modalProductRating" class="flex space-x-1 text-yellow-400"></div>
+                    </div>
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-gray-800 mb-2">Description</h4>
+                        <p id="modalProductDescription" class="text-gray-600"></p>
+                    </div>
+                    <button onclick="document.getElementById('productModal').classList.add('hidden')" 
+                            class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-full transition duration-300 w-full">
+                        Close
+                    </button>
+                </div>
+            </div>
         </div>
-      </div>
-    </form>
-    <div
-      id="message"
-      style="
-        display: none;
-        margin: 20px;
-        font-weight: bold;
-        color: green;
-        padding: 8px;
-        background-color: beige;
-        border-radius: 4px;
-        border-color: aquamarine;
-      "
-    ></div>
+    </div>
+
+    <!-- Thank You Popup -->
+    <div id="thankYouPopup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 hidden">
+        <div class="bg-white p-8 rounded-lg shadow-xl max-w-md w-full mx-4">
+            <div class="text-center">
+                <i class="fas fa-check-circle text-green-500 text-5xl mb-4"></i>
+                <h3 class="text-2xl font-bold text-gray-800 mb-2">Thank You!</h3>
+                <p class="text-gray-600 mb-6">Your message has been sent successfully. We'll get back to you soon.</p>
+                <button onclick="document.getElementById('thankYouPopup').classList.add('hidden')" 
+                        class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-full transition duration-300">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
 
     <script>
-      document.getElementById("form").addEventListener("submit", function (e) {
-        e.preventDefault(); // Prevent the default form submission
-        document.getElementById("message").textContent = "Submitting..";
-        document.getElementById("message").style.display = "block";
-        document.getElementById("submit-button").disabled = true;
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('hidden');
+        }
+        
+        // Page navigation functions
+        function showHome() {
+            hideAllSections();
+            document.getElementById('home').classList.remove('hidden');
+            toggleMobileMenu();
+            window.scrollTo(0, 0);
+        }
+        
+        function showProducts() {
+            hideAllSections();
+            document.getElementById('products').classList.remove('hidden');
+            toggleMobileMenu();
+            window.scrollTo(0, 0);
+        }
+        
+        function showAbout() {
+            hideAllSections();
+            document.getElementById('about').classList.remove('hidden');
+            toggleMobileMenu();
+            window.scrollTo(0, 0);
+        }
+        
+        function showContact() {
+            hideAllSections();
+            document.getElementById('contact').classList.remove('hidden');
+            toggleMobileMenu();
+            window.scrollTo(0, 0);
+        }
+        
+        function hideAllSections() {
+            const sections = document.querySelectorAll('.page-section');
+            sections.forEach(section => {
+                section.classList.add('hidden');
+            });
+        }
+        
+        // Product filtering
+        function filterProducts(category) {
+            const products = document.querySelectorAll('.product-card');
+            
+            products.forEach(product => {
+                if (category === 'all') {
+                    product.style.display = 'block';
+                } else if (product.classList.contains(category)) {
+                    product.style.display = 'block';
+                } else {
+                    product.style.display = 'none';
+                }
+            });
+        }
+        
+        // Contact form submission
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+            
+            // Here you would typically send this data to a server
+            console.log('Form submitted:', { name, email, subject, message });
+            
+            // Show success popup
+            document.getElementById('thankYouPopup').classList.remove('hidden');
+            
+            // Reset form
+            this.reset();
+            
+            // Hide popup after 5 seconds automatically
+            setTimeout(() => {
+                document.getElementById('thankYouPopup').classList.add('hidden');
+            }, 5000);
+        });
+        
+        // Product overview function
+        function viewProduct(button) {
+            const productCard = button.closest('.product-card');
+            const productData = {
+                image: productCard.querySelector('img').src,
+                title: productCard.querySelector('h3').textContent,
+                subtitle: productCard.querySelector('p').textContent,
+                price: productCard.querySelector('span').textContent,
+                rating: productCard.querySelector('.flex.space-x-1').innerHTML,
+                description: "This is a detailed description of the product. It would include care instructions for plants or material details for pots. The description would be dynamically loaded based on the product being viewed."
+            };
 
-        // Collect the form data
-        var formData = new FormData(this);
-        var keyValuePairs = [];
-        for (var pair of formData.entries()) {
-          keyValuePairs.push(pair[0] + "=" + pair[1]);
+            // Populate modal
+            document.getElementById('modalProductImage').src = productData.image;
+            document.getElementById('modalProductTitle').textContent = productData.title;
+            document.getElementById('modalProductSubtitle').textContent = productData.subtitle;
+            document.getElementById('modalProductPrice').textContent = productData.price;
+            document.getElementById('modalProductRating').innerHTML = productData.rating;
+            document.getElementById('modalProductDescription').textContent = productData.description;
+            
+            // Show modal
+            document.getElementById('productModal').classList.remove('hidden');
         }
 
-        var formDataString = keyValuePairs.join("&");
-
-        // Send a POST request to your Google Apps Script
-        fetch(
-          "https://script.google.com/macros/s/AKfycbywPN2fllFSOfjzzwpWZbODknasHqUNi0fw9GeCRUpYtiF_zxIDLJY9Z1r-UQI8AxXy9g/exec",
-          {
-            redirect: "follow",
-            method: "POST",
-            body: formDataString,
-            headers: {
-              "Content-Type": "text/plain;charset=utf-8",
-            },
-          }
-        )
-          .then(function (response) {
-            // Check if the request was successful
-            if (response) {
-              return response; // Assuming your script returns JSON response
-            } else {
-              throw new Error("Failed to submit the form.");
-            }
-          })
-          .then(function (data) {
-            // Display a success message
-            document.getElementById("message").textContent =
-              "Data submitted successfully!";
-            document.getElementById("message").style.display = "block";
-            document.getElementById("message").style.backgroundColor = "green";
-            document.getElementById("message").style.color = "beige";
-            document.getElementById("submit-button").disabled = false;
-            document.getElementById("form").reset();
-
-            setTimeout(function () {
-              document.getElementById("message").textContent = "";
-              document.getElementById("message").style.display = "none";
-            }, 2600);
-          })
-          .catch(function (error) {
-            // Handle errors, you can display an error message here
-            console.error(error);
-            document.getElementById("message").textContent =
-              "An error occurred while submitting the form.";
-            document.getElementById("message").style.display = "block";
-          });
-      });
+        // Initialize - show home page by default
+        document.addEventListener('DOMContentLoaded', function() {
+            showHome();
+        });
     </script>
-  </body>
+</body>
 </html>
